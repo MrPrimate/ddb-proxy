@@ -1,0 +1,5 @@
+node_modules/
+.vscode/
+/dist/
+yarn-error.log
+/sync*.sh

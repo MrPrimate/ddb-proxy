@@ -1,0 +1,68 @@
+const fetch = require("node-fetch");
+const CONFIG = require("./config.js");
+const authentication = require("./auth.js");
+
+const getMonsterCount = (cobaltId, searchTerm="", homebrew, homebrewOnly, sources) => {
+  return new Promise((resolve, reject) => {
+    const headers = (authentication.CACHE_AUTH.exists(cobaltId).data !== null) ? {headers: {"Authorization": `Bearer ${authentication.CACHE_AUTH.exists(cobaltId).data}`}} : {};
+    const url = CONFIG.urls.monstersAPI(0,1, searchTerm, homebrew, homebrewOnly, sources);
+    fetch(url, headers)
+      .then(res => res.json())
+      .then(json => {
+        resolve(json.pagination.total);
+      })
+      .catch(error => {
+        console.log("Error retrieving monsters");
+        console.log(error);
+        reject(error);
+      });
+  });
+
+};
+
+const extractMonsters = (cobaltId, searchTerm="", homebrew, homebrewOnly, sources) => {
+  return new Promise((resolve, reject) => {
+    console.log(`Retrieving monsters for ${cobaltId}`);
+
+    let monsters = [];
+    const headers = (authentication.CACHE_AUTH.exists(cobaltId).data !== null) ? {headers: {"Authorization": `Bearer ${authentication.CACHE_AUTH.exists(cobaltId).data}`}} : {};
+    let count = 0;
+    // fetch 100 monsters at a time - api limit
+    let take = 100;
+    getMonsterCount(cobaltId, searchTerm, homebrew, homebrewOnly, sources).then(async (total) => {
+      console.log(`Total monsters ${total}`);
+      const hardTotal = total;
+      while (total >= count && hardTotal >= count) {
+        console.log(`Fetching monsters ${count}`);
+        const url = CONFIG.urls.monstersAPI(count,take,searchTerm, homebrew, homebrewOnly, sources);
+        await fetch(url, headers)
+          .then(res => res.json())
+          .then(json => {
+            const availableMonsters = json.data.filter((monster) => {
+              const isHomebrew = (homebrew) ? monster.isHomebrew === true : false;
+              const available = monster.isReleased === true || isHomebrew;
+              return available;
+            });
+            monsters.push(...availableMonsters);
+          })
+          .catch(error => {
+            console.log(`Error retrieving monsters at ${count}`);
+            console.log(error);
+            reject(error);
+          });
+        count += take;
+      }
+      return monsters;
+    }).then((data) => {
+      console.log(`Monster count: ${data.length}.`);
+      resolve(data);
+    }).catch(error => {
+      console.log("Error retrieving monsters");
+      console.log(error);
+      reject(error);
+    });
+  });
+};
+
+
+exports.extractMonsters = extractMonsters;
