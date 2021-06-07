@@ -25,6 +25,12 @@ game.settings.set("ddb-importer", "custom-proxy", true);
 game.settings.set("ddb-importer", "api-endpoint", "YOUR_URL_HERE");
 ```
 
+To revert:
+```
+game.settings.set("ddb-importer", "api-endpoint", "https://proxy.ddb.mrprimate.co.uk");
+game.settings.set("ddb-importer", "custom-proxy", false);
+```
+
 ## Why is x feature missing
 
 This is a cut down, MVP implementation of the proxy, it is meant for individual use and does not implement caching. It should not be run as a service for others.
