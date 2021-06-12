@@ -1,3 +1,17 @@
+# THIS FORK
+
+This fork is an adaption, with a few features, that are only available on the server run by MrPrimate.
+I added the things needed to make it work. (You can enable the patreon only features if you like).
+
+All the credit goes to him, and former developers, who did a great job. I do not want any credits, support nor responsibility. If that is OK for you simply execute the following line within the javascript console of your browser while in foundry vtt.
+
+```javascript
+game.settings.set("ddb-importer", "api-endpoint", "https://vtt-ddb.bilger.info");
+```
+
+As mentioned before it may work, and as long as I need it it will. Use it freely.
+
+
 # ddb-proxy
 
 This proxy allows for communication with DDB for use integrating content into Foundry VTT.

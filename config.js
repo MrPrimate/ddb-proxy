@@ -56,6 +56,26 @@ const CONFIG = {
       if (campaignId) campaign = `&campaignId=${campaignId}`;
       return `${CONFIG.urls.baseUrl}/game-data/items?sharingSetting=2${campaign}`;
     },
+    vehiclesAPI: (campaignId) => {
+      let campaign = "";
+      if (campaignId) campaign = `&campaignId=${campaignId}`;
+      return `${CONFIG.urls.baseUrl}/game-data/vehicles?sharingSetting=2${campaign}`;
+    },
+    classesAPI: (campaignId) => {
+      let campaign = "";
+      if (campaignId) campaign = `&campaignId=${campaignId}`;
+      return `${CONFIG.urls.baseUrl}/game-data/classes?sharingSetting=2${campaign}`;
+    },
+    featsAPI: (campaignId) => {
+      let campaign = "";
+      if (campaignId) campaign = `&campaignId=${campaignId}`;
+      return `${CONFIG.urls.baseUrl}/game-data/feats?sharingSetting=2${campaign}`;
+    },
+    racesAPI: (campaignId) => {
+      let campaign = "";
+      if (campaignId) campaign = `&campaignId=${campaignId}`;
+      return `${CONFIG.urls.baseUrl}/game-data/races?sharingSetting=2${campaign}`;
+    },
     monstersAPI: (skip, take, search="", homebrew=false, homebrewOnly=false, sources=[]) => {
       let sourceSearch = sources.reduce((previous, current) => previous + `&sources=${current}`, "");
       let useHomebrew = (homebrew) ? "" : "&showHomebrew=f";
