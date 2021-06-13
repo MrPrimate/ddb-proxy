@@ -16,6 +16,23 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 
+const authPath = [
+  "/proxy/auth",
+];
+app.options(authPath, cors(), (req, res) => res.status(200).send());
+app.post(authPath, cors(), express.json(), (req, res) => {
+
+  if (!req.body.cobalt || req.body.cobalt == "") return res.json({ success: false, message: "No cobalt token" });
+  const cacheId = authentication.getCacheId(req.body.cobalt);
+
+  authentication.getBearerToken(cacheId, req.body.cobalt)
+    .then( token => {
+      if (!token) return res.json({ success: false, message: "You must supply a valid cobalt value." });
+      return res
+        .status(200)
+        .json({ success: true, message: "Authenticated." });
+    });
+});
 
 /**
  * Returns raw json from DDB
