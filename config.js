@@ -70,6 +70,7 @@ const CONFIG = {
     optionsAPI: () => {
       return `${CONFIG.urls.baseUrl}/game-data/class-feature/collection`;
     },
+    campaignsAPI: "https://www.dndbeyond.com/api/campaign/stt/active-campaigns",
   },
 
 };
