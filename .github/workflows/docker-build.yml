@@ -19,7 +19,8 @@ jobs:
 
     - id: read-docker-image-identifiers
       name: Read Docker Image Identifiers
-      run: echo ::set-env name=IMAGE_REPOSITORY::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
+      id: get-repo
+      run: echo "::set-output name=IMAGE_REPOSITORY::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
 
     - name: Log in to the Container registry
       uses: docker/login-action@v1
@@ -34,4 +35,4 @@ jobs:
         context: docker
         target: ${{ env.TARGET }}
         push: true
-        tags: '${{ env.REGISTRY }}/${{ env.IMAGE_REPOSITORY }}'
+        tags: '${{ env.REGISTRY }}/${{ steps.get-repo.outputs.IMAGE_REPOSITORY }}'
