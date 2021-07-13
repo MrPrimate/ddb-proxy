@@ -17,9 +17,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - id: read-docker-image-identifiers
-      name: Read Docker Image Identifiers
-      id: get-repo
+    - id: get-repo
+      name: Get Docker Image Identifiers
       run: echo "::set-output name=IMAGE_REPOSITORY::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
 
     - name: Log in to the Container registry
