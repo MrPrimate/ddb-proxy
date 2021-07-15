@@ -33,7 +33,7 @@ services:
   # this service can be a separate file, remember to
   # leave networks declaration in both of those
   ddb-proxy:
-    build: .
+    image: ghcr.io/mrprimate/ddb-proxy:latest
     environment:
       - VIRTUAL_HOST=ddb-proxy.example.com
       - VIRTUAL_PORT=3000
