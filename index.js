@@ -119,8 +119,8 @@ app.post("/proxy/class/spells", cors(), express.json(), (req, res) => {
 /**
  * Attempt to parse the character remotely
  */
-app.options("/proxy/character", cors(), (req, res) => res.status(200).send());
-app.post("/proxy/character", cors(), express.json(), (req, res) => {
+app.options(["/proxy/character","/proxy/v5/character"], cors(), (req, res) => res.status(200).send());
+app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (req, res) => {
   // check for cobalt token
   const cobalt = req.body.cobalt;
 
@@ -147,7 +147,17 @@ app.post("/proxy/character", cors(), express.json(), (req, res) => {
           const campaignId =
             result.campaign && result.campaign.id && result.campaign.id !== "" ? result.campaign.id : null;
           const optionIds = result.optionalClassFeatures.map((opt) => opt.classFeatureId);
-          return character.getOptionalFeatures(result, optionIds, campaignId, cobaltId);
+          return character.getOptionalClassFeatures(result, optionIds, campaignId, cobaltId);
+        } else {
+          return result;
+        }
+      })
+      .then((result) => {
+        if (cobalt) {
+          const campaignId =
+            result.campaign && result.campaign.id && result.campaign.id !== "" ? result.campaign.id : null;
+          const optionIds = result.optionalOrigins.map((opt) => opt.racialTraitId);
+          return character.getOptionalOrigins(result, optionIds, campaignId, cobaltId);
         } else {
           return result;
         }

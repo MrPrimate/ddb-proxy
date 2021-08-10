@@ -29,7 +29,7 @@ const CONFIG = {
   classMap: CLASS_MAP,
   urls: {
     authService: "https://auth-service.dndbeyond.com/v1/cobalt-token",
-    baseUrl: "https://character-service.dndbeyond.com/character/v4",
+    baseUrl: "https://character-service.dndbeyond.com/character/v5",
     characterUrl: (characterId) =>
       `${CONFIG.urls.baseUrl}/character/${characterId}`,
     spellsAPI: (classId, classLevel, campaignId) => {
@@ -67,8 +67,11 @@ const CONFIG = {
       console.log(url);
       return url;
     },
-    optionsAPI: () => {
+    classOptionsAPI: () => {
       return `${CONFIG.urls.baseUrl}/game-data/class-feature/collection`;
+    },
+    racialTraitOptionsAPI: () => {
+      return `${CONFIG.urls.baseUrl}/game-data/racial-trait/collection`;
     },
     campaignsAPI: "https://www.dndbeyond.com/api/campaign/stt/active-campaigns",
   },

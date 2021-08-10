@@ -11,9 +11,9 @@ const extractClassOptions = (cobaltId, optionIds=[], campaignId=null) => {
   console.log(optionIds);
 
   return new Promise((resolve, reject) => {
-    console.log(`Retrieving options for ${cobaltId}`);
+    console.log(`Retrieving class options for ${cobaltId}`);
 
-    const url = CONFIG.urls.optionsAPI();
+    const url = CONFIG.urls.classOptionsAPI();
     const body = JSON.stringify({
       "campaignId": campaignId,
       "sharingSetting": 2,
@@ -34,31 +34,73 @@ const extractClassOptions = (cobaltId, optionIds=[], campaignId=null) => {
     };
 
     fetch(url, options)
-      //.then(res => {console.log(res); return res;})
       .then(res => res.json())
       .then(json => {
-        // console.log(json.data);
         if (isValidData(json)) {
           const filteredItems = json.data.definitionData.filter(option =>
             option.sources && (option.sources.length === 0 || option.sources.some((source) => source.sourceId != 39))
           );
-          console.log(
-            `Adding ${filteredItems.length} options available to cache for ${cobaltId}...`
-          );
           resolve(filteredItems);
         } else {
-          console.log("Received no valid option data, instead:" + json.message);
+          console.log("Received no valid class option data, instead:" + json.message);
           reject(json.message);
         }
       })
       .catch(error => {
-        console.log("Error retrieving options");
+        console.log("Error retrieving class options");
         console.log(error);
         reject(error);
       });
   });
 };
 
+
+const extractRacialTraitsOptions = (cobaltId, optionIds=[], campaignId=null) => {
+  console.log(optionIds);
+
+  return new Promise((resolve, reject) => {
+    console.log(`Retrieving origin options for ${cobaltId}`);
+
+    const url = CONFIG.urls.racialTraitOptionsAPI();
+    const body = JSON.stringify({
+      "campaignId": campaignId,
+      "sharingSetting": 2,
+      "ids": optionIds,
+    });
+
+    const auth = authentication.CACHE_AUTH.exists(cobaltId);
+    const headers = (auth && auth.data) ? {
+      "Authorization": `Bearer ${auth.data}`,
+      "Content-Type": "application/json",
+      "Content-Length": body.length,
+    } : {};
+
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body
+    };
+
+    fetch(url, options)
+      .then(res => res.json())
+      .then(json => {
+        if (isValidData(json)) {
+          const filteredItems = json.data.definitionData.filter(option =>
+            option.sources && (option.sources.length === 0 || option.sources.some((source) => source.sourceId != 39))
+          );
+          resolve(filteredItems);
+        } else {
+          console.log("Received no valid origin option data, instead:" + json.message);
+          reject(json.message);
+        }
+      })
+      .catch(error => {
+        console.log("Error retrieving origin options");
+        console.log(error);
+        reject(error);
+      });
+  });
+};
 
 const checkStatus = res => {
   if (res.ok) {
@@ -93,7 +135,7 @@ const extractCharacterData = (cobaltId, characterId) => {
   });
 };
 
-const getOptionalFeatures = (data, optionIds, campaignId, cobaltId) => {
+const getOptionalClassFeatures = (data, optionIds, campaignId, cobaltId) => {
   const cacheId = authentication.CACHE_AUTH.exists(cobaltId);
 
   return new Promise((resolve) => {
@@ -111,7 +153,26 @@ const getOptionalFeatures = (data, optionIds, campaignId, cobaltId) => {
   });
 };
 
+const getOptionalOrigins = (data, optionIds, campaignId, cobaltId) => {
+  const cacheId = authentication.CACHE_AUTH.exists(cobaltId);
+
+  return new Promise((resolve) => {
+    if (cacheId) {
+      console.log("ORIGIN Optional Features:");
+
+      extractRacialTraitsOptions(cobaltId, optionIds, campaignId)
+        .then(options => {
+          data.originOptions = options;
+          resolve(data);
+        });
+    } else {
+      resolve(data);
+    }
+  });
+};
+
 
 exports.extractClassOptions = extractClassOptions;
 exports.extractCharacterData = extractCharacterData;
-exports.getOptionalFeatures = getOptionalFeatures;
+exports.getOptionalClassFeatures = getOptionalClassFeatures;
+exports.getOptionalOrigins = getOptionalOrigins;

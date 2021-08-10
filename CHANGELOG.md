@@ -1,3 +1,11 @@
+# 0.0.5
+
+* Support v5 API, compatible with ddb-importer v2.3.2 and greater.
+
+# 0.0.4
+
+* Docker release.
+
 # 0.0.3
 
 * Endpoint for fetching campaigns.
