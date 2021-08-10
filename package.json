@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "lint": "cd parser; npx eslint ./",
+    "lint": "npx eslint ./",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
