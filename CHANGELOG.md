@@ -1,3 +1,7 @@
+# 0.0.6
+
+* Correct monster images
+
 # 0.0.5
 
 * Support v5 API, compatible with ddb-importer v2.3.2 and greater.

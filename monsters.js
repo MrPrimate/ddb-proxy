@@ -20,6 +20,22 @@ const getMonsterCount = (cobaltId, searchTerm="", homebrew, homebrewOnly, source
 
 };
 
+function imageFiddleMonsters(monsters) {
+  const imageFiddledMonsters = monsters.map((monster) => {
+    const imageResizeRegEx = /\/thumbnails\/(\d*)\/(\d*)\/(\d*)\/(\d*)\/(\d*)\.(jpg|png|jpeg|webp|gif)/;
+    if (monster.largeAvatarUrl) {
+      const original = monster.largeAvatarUrl.replace(".com.com/", ".com/");
+      monster.largeAvatarUrl = original.replace(imageResizeRegEx, "/thumbnails/$1/$2/1000/1000/$5.$6");
+    }
+    if (monster.basicAvatarUrl) {
+      const original = monster.basicAvatarUrl.replace(".com.com/", ".com/");
+      monster.basicAvatarUr = original.replace(imageResizeRegEx, "/thumbnails/$1/$2/1000/1000/$5.$6");
+    }
+    return monster;
+  });
+  return imageFiddledMonsters;
+}
+
 const extractMonsters = (cobaltId, searchTerm="", homebrew, homebrewOnly, sources) => {
   return new Promise((resolve, reject) => {
     console.log(`Retrieving monsters for ${cobaltId}`);
@@ -43,7 +59,8 @@ const extractMonsters = (cobaltId, searchTerm="", homebrew, homebrewOnly, source
               const available = monster.isReleased === true || isHomebrew;
               return available;
             });
-            monsters.push(...availableMonsters);
+            const imageFiddledMonsters = imageFiddleMonsters(availableMonsters);
+            monsters.push(...imageFiddledMonsters);
           })
           .catch(error => {
             console.log(`Error retrieving monsters at ${count}`);
