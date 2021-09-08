@@ -134,6 +134,7 @@ app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (re
 
   const updateId = req.body.updateId ? req.body.updateId : 0;
   const cobaltId = `${characterId}${cobalt}`;
+  let campaignId = null;
 
   authentication.getBearerToken(cobaltId, cobalt).then(() => {
     character
@@ -142,10 +143,17 @@ app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (re
         console.log(`Name: ${data.name}, URL: ${CONFIG.urls.baseUrl}/character/${data.id}`);
         return Promise.resolve(data);
       })
+      .then((data) => {
+        if (data.campaign && data.campaign.id && data.campaign.id !== "") campaignId = data.campaign.id;
+        const result = {
+          character: data,
+          name: data.name,
+          decorations: data.decorations,
+        };
+        return result;
+      })
       .then((result) => {
         if (cobalt) {
-          const campaignId =
-            result.campaign && result.campaign.id && result.campaign.id !== "" ? result.campaign.id : null;
           const optionIds = result.optionalClassFeatures.map((opt) => opt.classFeatureId);
           return character.getOptionalClassFeatures(result, optionIds, campaignId, cobaltId);
         } else {
@@ -154,8 +162,6 @@ app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (re
       })
       .then((result) => {
         if (cobalt) {
-          const campaignId =
-            result.campaign && result.campaign.id && result.campaign.id !== "" ? result.campaign.id : null;
           const optionIds = result.optionalOrigins.map((opt) => opt.racialTraitId);
           return character.getOptionalOrigins(result, optionIds, campaignId, cobaltId);
         } else {

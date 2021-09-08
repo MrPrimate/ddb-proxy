@@ -214,7 +214,6 @@ const loadSpells = (classInfo, cobaltToken, cantrips) => {
         console.log("[ ALWAYS KNOWN SPELLS =========================================== ]");
         const knownSpells = extractAlwaysKnownSpells(info, cobaltToken, cantrips);
         const otherSpells = extractSpells(info, cobaltToken); // for cantrips etc
-        //return Promise.all([otherSpells]);
         return Promise.all([knownSpells, otherSpells]);
       } else if (info.spellType == "SPELLS") {
         console.log("[ ALL SPELLS ==================================================== ]");
@@ -235,15 +234,15 @@ const loadSpells = (classInfo, cobaltToken, cantrips) => {
   });
 };
 
-const getSpellAdditions = (data, spellListIds, cacheId) => {
+function getSpellAdditions(data, spellListIds, cacheId) {
   return new Promise((resolve) => {
-    const classInfo = extractClassIds(data);
+    const classInfo = extractClassIds(data.character);
     console.log("CLASS INFORMATION FOR SPELL ADDITIONS:");
     console.log(classInfo);
 
     loadSpellAdditions(classInfo, cacheId, spellListIds).then(classInfo => {
       // add the always prepared spells to the class' spell list
-      data.classSpells = data.classSpells.map(classSpells => {
+      data.character.classSpells = data.character.classSpells.map(classSpells => {
         // find always prepared spells in the results
         const additionalSpells = classInfo.find(
           classInfo => classInfo.characterClassId === classSpells.characterClassId
@@ -252,10 +251,8 @@ const getSpellAdditions = (data, spellListIds, cacheId) => {
         if (additionalSpells) {
           additionalSpells.spells.forEach(spell => {
             console.log("Adding spells to character...");
-            // if (classSpells.spells.find(s => s.definition.name === spell.definition.name) === undefined) {
             console.log(" + Adding spell to character: " + spell.definition.name);
             classSpells.spells.push(spell);
-            //}
           });
         }
         return classSpells;
@@ -264,7 +261,7 @@ const getSpellAdditions = (data, spellListIds, cacheId) => {
       resolve(data);
     });
   });
-};
+}
 
 exports.loadSpells = loadSpells;
 exports.getSpellAdditions = getSpellAdditions;
