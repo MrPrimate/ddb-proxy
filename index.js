@@ -258,7 +258,7 @@ app.post("/proxy/campaigns", cors(), express.json(), (req, res) => {
   authentication.getBearerToken(cacheId, req.body.cobalt).then((token) => {
     if (!token) return res.json({ success: false, message: "You must supply a valid cobalt value." });
     campaign
-      .getCampaigns(cacheId)
+      .getCampaigns(req.body.cobalt, cacheId)
       .then((data) => {
         return res
           .status(200)

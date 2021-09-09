@@ -1,3 +1,7 @@
+# 0.0.7
+
+* API change for campaigns backend.
+
 # 0.0.6
 
 * Correct monster images
