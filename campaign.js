@@ -13,9 +13,9 @@ const getCampaigns = (cobalt, cobaltId) => {
     const options = {
       credentials: "include",
       headers: {
-        'User-Agent': "Foundry VTT Character Integrator",
-        'Accept': "*/*",
-        'Cookie': `cobalt-token=${authentication.CACHE_AUTH.exists(cobaltId).data}; CobaltSession=${cobalt}`,
+        "User-Agent": "Foundry VTT Character Integrator",
+        "Accept": "*/*",
+        "Cookie": `cobalt-token=${authentication.CACHE_AUTH.exists(cobaltId).data}; CobaltSession=${cobalt}`,
       },
       method: "GET",
       mode: "cors",
