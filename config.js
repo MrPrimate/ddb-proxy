@@ -73,7 +73,7 @@ const CONFIG = {
     racialTraitOptionsAPI: () => {
       return `${CONFIG.urls.baseUrl}/game-data/racial-trait/collection`;
     },
-    campaignsAPI: "https://www.dndbeyond.com/api/campaign/stt/active-campaigns",
+    campaignsAPI: "https://www.dndbeyond.com/api/campaign/active-campaigns",
   },
 
 };
