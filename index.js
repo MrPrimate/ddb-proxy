@@ -157,6 +157,7 @@ app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (re
           const optionIds = result.optionalClassFeatures.map((opt) => opt.classFeatureId);
           return character.getOptionalClassFeatures(result, optionIds, campaignId, cobaltId);
         } else {
+          result.classOptions = [];
           return result;
         }
       })
@@ -165,6 +166,7 @@ app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (re
           const optionIds = result.optionalOrigins.map((opt) => opt.racialTraitId);
           return character.getOptionalOrigins(result, optionIds, campaignId, cobaltId);
         } else {
+          result.originOptions = [];
           return result;
         }
       })
