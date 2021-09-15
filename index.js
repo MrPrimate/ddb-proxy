@@ -149,25 +149,21 @@ app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (re
           character: data,
           name: data.name,
           decorations: data.decorations,
+          classOptions: [],
+          originOptions: [],
         };
         return result;
       })
       .then((result) => {
         if (cobalt) {
-          const optionIds = result.optionalClassFeatures.map((opt) => opt.classFeatureId);
+          const optionIds = result.character.optionalClassFeatures.map((opt) => opt.classFeatureId);
           return character.getOptionalClassFeatures(result, optionIds, campaignId, cobaltId);
-        } else {
-          result.classOptions = [];
-          return result;
         }
       })
       .then((result) => {
         if (cobalt) {
-          const optionIds = result.optionalOrigins.map((opt) => opt.racialTraitId);
+          const optionIds = result.character.optionalOrigins.map((opt) => opt.racialTraitId);
           return character.getOptionalOrigins(result, optionIds, campaignId, cobaltId);
-        } else {
-          result.originOptions = [];
-          return result;
         }
       })
       .then((result) => {
