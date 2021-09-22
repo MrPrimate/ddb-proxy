@@ -1,3 +1,7 @@
+# 0.0.10
+
+* ARM support
+
 # 0.0.7
 
 * API change for campaigns backend.
