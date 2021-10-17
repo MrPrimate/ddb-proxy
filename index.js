@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const http = require('http');
 const crypto = require("crypto");
 
 const CONFIG = require("./config.js");
@@ -10,8 +11,13 @@ const filterModifiers = require("./filterModifiers.js");
 const spells = require("./spells.js");
 const character = require("./character.js");
 const items = require("./items.js");
+const classes = require("./classes.js");
+const feats = require("./feats.js");
+const races = require("./races.js");
 const monsters = require("./monsters.js");
 const campaign = require("./campaign.js");
+const vehicles = require("./vehicles.js");
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -55,6 +61,122 @@ app.post("/proxy/items", cors(), express.json(), (req, res) => {
         return res.json({ success: false, message: "Unknown error during item loading: " + error });
       });
   });
+});
+
+/**
+ * Returns raw json from DDB
+ */
+app.options("/proxy/classes", cors(), (req, res) => res.status(200).send());
+app.post("/proxy/classes", cors(), express.json(), (req, res) => {
+
+  if (!req.body.cobalt || req.body.cobalt == "") return res.json({ success: false, message: "No cobalt token" });
+
+  const cacheId = authentication.getCacheId(req.body.cobalt);
+  const campaignId = req.body.campaignId;
+
+  authentication.getBearerToken(cacheId, req.body.cobalt)
+    .then( token => {
+      if (!token) return res.json({ success: false, message: "You must supply a valid cobalt value." });
+      classes.extractClasses(cacheId, campaignId)
+        .then(data => {
+          return res
+            .status(200)
+            .json({ success: true, message: "All available classes successfully received.", data: data });
+        })
+        .catch(error => {
+          console.log(error);
+          if (error === "Forbidden") {
+            return res.json({ success: false, message: "You must supply a valid bearer token." });
+          }
+          return res.json({ success: false, message: "Unknown error during classes loading: " + error });
+        });
+    });
+});
+app.options("/proxy/feats", cors(), (req, res) => res.status(200).send());
+app.post("/proxy/feats", cors(), express.json(), (req, res) => {
+
+  if (!req.body.cobalt || req.body.cobalt == "") return res.json({ success: false, message: "No cobalt token" });
+
+  const cacheId = authentication.getCacheId(req.body.cobalt);
+  const campaignId = req.body.campaignId;
+
+  authentication.getBearerToken(cacheId, req.body.cobalt)
+    .then( token => {
+      if (!token) return res.json({ success: false, message: "You must supply a valid cobalt value." });
+      feats.extractFeats(cacheId, campaignId)
+        .then(data => {
+          return res
+            .status(200)
+            .json({ success: true, message: "All available classes successfully received.", data: data });
+        })
+        .catch(error => {
+          console.log(error);
+          if (error === "Forbidden") {
+            return res.json({ success: false, message: "You must supply a valid bearer token." });
+          }
+          return res.json({ success: false, message: "Unknown error during classes loading: " + error });
+        });
+    });
+});
+app.options("/proxy/races", cors(), (req, res) => res.status(200).send());
+app.post("/proxy/races", cors(), express.json(), (req, res) => {
+
+  if (!req.body.cobalt || req.body.cobalt == "") return res.json({ success: false, message: "No cobalt token" });
+
+  const cacheId = authentication.getCacheId(req.body.cobalt);
+  const campaignId = req.body.campaignId;
+
+  authentication.getBearerToken(cacheId, req.body.cobalt)
+    .then( token => {
+      if (!token) return res.json({ success: false, message: "You must supply a valid cobalt value." });
+      races.extractRaces(cacheId, campaignId)
+        .then(data => {
+          return res
+            .status(200)
+            .json({ success: true, message: "All available classes successfully received.", data: data });
+        })
+        .catch(error => {
+          console.log(error);
+          if (error === "Forbidden") {
+            return res.json({ success: false, message: "You must supply a valid bearer token." });
+          }
+          return res.json({ success: false, message: "Unknown error during classes loading: " + error });
+        });
+    });
+});
+app.options("/proxy/vehicles2", cors(), (req, res) => res.status(200).send());
+app.post("/proxy/vehicles2", cors(), express.json(), (req, res) => {
+
+  if (!req.body.cobalt || req.body.cobalt == "") return res.json({ success: false, message: "No cobalt token" });
+
+  const cacheId = authentication.getCacheId(req.body.cobalt);
+  const campaignId = req.body.campaignId;
+
+  authentication.getBearerToken(cacheId, req.body.cobalt)
+    .then( token => {
+      if (!token) return res.json({ success: false, message: "You must supply a valid cobalt value." });
+      vehicles.extractVehicles(cacheId, campaignId)
+        .then(data => {
+          return res
+            .status(200)
+            .json({ success: true, message: "All available classes successfully received.", data: data });
+        })
+        .catch(error => {
+          console.log(error);
+          if (error === "Forbidden") {
+            return res.json({ success: false, message: "You must supply a valid bearer token." });
+          }
+          return res.json({ success: false, message: "Unknown error during classes loading: " + error });
+        });
+    });
+});
+/**
+ * Returns raw json from DDB
+ */
+app.options("/proxy/vehicles", cors(), (req, res) => res.status(200).send());
+app.post("/proxy/vehicles", cors(), express.json(), (req, res) => {
+  const file = `${__dirname}/vehicles.json`;
+  res.download(file); // Set disposition and send it.
 });
 
 /**
@@ -272,6 +394,16 @@ app.post("/proxy/campaigns", cors(), express.json(), (req, res) => {
   });
 });
 
-app.listen(port, () => {
+// patreon
+
+io.on('connection', (socket) => {
+  socket.on('register', (msg) => {
+    console.log('message: ' + msg);
+    io.emit('registered', {"userHash":"256353136a387e330c50b1842e597c59cabdc8a1a52e64672078bbd5570be7f6----------"});
+    io.emit('auth',{"email":"no@none.com","key":"aaaaaaaa-bbbb-1111-4444-999999999999","expiry":1726078024,"tier":"GOD"});
+  });
+});
+
+server.listen(port, () => {
   console.log(`DDB Proxy started on :${port}`);
 });
