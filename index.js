@@ -22,6 +22,19 @@ const vehicles = require("./vehicles.js");
 const app = express();
 const port = process.env.PORT || 3000;
 
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+
+
+app.options("/patreon/valid", cors(), (req, res) => res.status(200).send());
+app.post("/patreon/valid", cors(), express.json(), (req, res) => {
+  console.log('patreon check');
+
+  return res.json({"success":true,"message":"Status determined.","data":true}); 
+});
+
 const authPath = ["/proxy/auth"];
 app.options(authPath, cors(), (req, res) => res.status(200).send());
 app.post(authPath, cors(), express.json(), (req, res) => {
