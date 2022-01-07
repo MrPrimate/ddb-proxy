@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const CONFIG = require("./config.js");
 const authentication = require("./auth.js");
 
-const getMonsterCount = (cobaltId, searchTerm="", homebrew, homebrewOnly, sources) => {
+function getMonsterCount(cobaltId, searchTerm="", homebrew, homebrewOnly, sources) {
   return new Promise((resolve, reject) => {
     const headers = (authentication.CACHE_AUTH.exists(cobaltId).data !== null) ? {headers: {"Authorization": `Bearer ${authentication.CACHE_AUTH.exists(cobaltId).data}`}} : {};
     const url = CONFIG.urls.monstersAPI(0,1, searchTerm, homebrew, homebrewOnly, sources);
@@ -18,7 +18,7 @@ const getMonsterCount = (cobaltId, searchTerm="", homebrew, homebrewOnly, source
       });
   });
 
-};
+}
 
 function imageFiddleMonsters(monsters) {
   const imageFiddledMonsters = monsters.map((monster) => {
@@ -82,4 +82,52 @@ const extractMonsters = (cobaltId, searchTerm="", homebrew, homebrewOnly, source
 };
 
 
+async function getIdCount(ids) {
+  return new Promise((resolve) => {
+    resolve(ids.length);
+  });
+}
+
+function extractMonstersById (cobaltId, ids) {
+  return new Promise((resolve, reject) => {
+    console.log(`Retrieving monsters for ${cobaltId} and ${ids}`);
+
+    let monsters = [];
+    let count = 0;
+    let take = 100;
+
+    getIdCount(ids).then(async (total) => {
+      const hardTotal = total;
+      while (total >= count && hardTotal >= count) {
+        const idSelection = ids.slice(count, count + take);
+        const headers =
+          authentication.CACHE_AUTH.exists(cobaltId).data !== null
+            ? { headers: { Authorization: `Bearer ${authentication.CACHE_AUTH.exists(cobaltId).data}` } }
+            : {};
+        const url = CONFIG.urls.monsterIdsAPI(idSelection);
+        await fetch(url, headers)
+          .then((res) => res.json())
+          .then((json) => {
+            // console.log(json.data);
+            const availableMonsters = json.data.filter((monster) => monster.isReleased === true || monster.isHomebrew);
+            const imageFiddledMonsters = imageFiddleMonsters(availableMonsters);
+            monsters.push(...imageFiddledMonsters);
+          })
+          .catch((error) => {
+            console.log("Error retrieving monsters by id");
+            console.log(error);
+            reject(error);
+          });
+        count += take;
+      }
+      return monsters;
+    }).then((data) => {
+      console.log(`Monster count: ${data.length}.`);
+      resolve(data);
+    });
+
+  });
+}
+
 exports.extractMonsters = extractMonsters;
+exports.extractMonstersById = extractMonstersById;

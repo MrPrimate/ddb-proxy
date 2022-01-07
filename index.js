@@ -119,8 +119,8 @@ app.post("/proxy/class/spells", cors(), express.json(), (req, res) => {
 /**
  * Attempt to parse the character remotely
  */
-app.options(["/proxy/character","/proxy/v5/character"], cors(), (req, res) => res.status(200).send());
-app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (req, res) => {
+app.options(["/proxy/character", "/proxy/v5/character"], cors(), (req, res) => res.status(200).send());
+app.post(["/proxy/character", "/proxy/v5/character"], cors(), express.json(), (req, res) => {
   // check for cobalt token
   const cobalt = req.body.cobalt;
 
@@ -169,9 +169,9 @@ app.post(["/proxy/character","/proxy/v5/character"], cors(), express.json(), (re
       .then((result) => {
         const spellListIds = result.classOptions
           ? result.classOptions
-            .filter((option) => option.spellListIds)
-            .map((option) => option.spellListIds)
-            .flat()
+              .filter((option) => option.spellListIds)
+              .map((option) => option.spellListIds)
+              .flat()
           : [];
         return spells.getSpellAdditions(result, spellListIds, cobaltId);
       })
@@ -212,11 +212,9 @@ app.post(getMonsterProxyRoutes, cors(), express.json(), (req, res) => {
   const performExactMatch = exactNameMatch && searchTerm && searchTerm !== "";
 
   const sources = req.body.sources || [];
-  console.log(sources);
 
   const hash = crypto.createHash("sha256");
   hash.update(cobalt + searchTerm);
-
   const cacheId = hash.digest("hex");
 
   authentication.getBearerToken(cacheId, cobalt).then((token) => {
@@ -232,6 +230,48 @@ app.post(getMonsterProxyRoutes, cors(), express.json(), (req, res) => {
           return data;
         }
       })
+      .then((data) => {
+        return res
+          .status(200)
+          .json({ success: true, message: "All available monsters successfully received.", data: data });
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error === "Forbidden") {
+          return res.json({ success: false, message: "You must supply a valid cobalt value." });
+        }
+        return res.json({ success: false, message: "Unknown error during monster loading: " + error });
+      });
+  });
+});
+
+/**
+ * Return RAW monster data from DDB
+ */
+const getMonsterIdsProxyRoutes = ["/proxy/monstersById", "/proxy/monsters/ids"];
+app.options(getMonsterIdsProxyRoutes, cors(), (req, res) => res.status(200).send());
+app.post(getMonsterIdsProxyRoutes, cors(), express.json(), (req, res) => {
+  // check for cobalt token
+  const cobalt = req.body.cobalt;
+  if (!cobalt || cobalt == "") return res.json({ success: false, message: "No cobalt token" });
+
+  const ids = req.body.ids;
+  if (!ids) {
+    return res.json({
+      success: false,
+      message: "Please supply required monster ids.",
+    });
+  }
+
+  const hash = crypto.createHash("sha256");
+  hash.update(cobalt + ids.join("-"));
+  const cacheId = hash.digest("hex");
+
+  authentication.getBearerToken(cacheId, cobalt).then((token) => {
+    if (!token) return res.json({ success: false, message: "You must supply a valid cobalt value." });
+
+    monsters
+      .extractMonstersById(cacheId, ids)
       .then((data) => {
         return res
           .status(200)
