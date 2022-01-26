@@ -30,6 +30,7 @@ const CONFIG = {
   urls: {
     authService: "https://auth-service.dndbeyond.com/v1/cobalt-token",
     baseUrl: "https://character-service.dndbeyond.com/character/v5",
+    monsterBaseUrl: "https://monster-service.dndbeyond.com/v1/Monster",
     characterUrl: (characterId) =>
       `${CONFIG.urls.baseUrl}/character/${characterId}`,
     spellsAPI: (classId, classLevel, campaignId) => {
@@ -63,7 +64,16 @@ const CONFIG = {
         sourceSearch = "";
         useHomebrew = "&showHomebrew=t";
       }
-      const url = `https://monster-service.dndbeyond.com/v1/Monster?search=${search}&skip=${skip}&take=${take}${useHomebrew}${sourceSearch}`;
+      const url = `${CONFIG.urls.monsterBaseUrl}?search=${search}&skip=${skip}&take=${take}${useHomebrew}${sourceSearch}`;
+      console.log(url);
+      return url;
+    },
+    monsterIdsAPI: (ids) => {
+      const idString = ids.reduce((previous, current) => {
+        const pre = previous === "" ? "?ids=" : "&ids=";
+        return previous + `${pre}${current}`;
+      }, "");
+      const url = `${CONFIG.urls.monsterBaseUrl}${idString}`;
       console.log(url);
       return url;
     },

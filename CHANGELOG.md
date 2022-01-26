@@ -1,3 +1,7 @@
+# 0.0.12
+
+* MonsterBy ID API failed
+
 # 0.0.10
 
 * ARM support
