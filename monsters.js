@@ -29,7 +29,7 @@ function imageFiddleMonsters(monsters) {
     }
     if (monster.basicAvatarUrl) {
       const original = monster.basicAvatarUrl.replace(".com.com/", ".com/");
-      monster.basicAvatarUr = original.replace(imageResizeRegEx, "/thumbnails/$1/$2/1000/1000/$5.$6");
+      monster.basicAvatarUrl = original.replace(imageResizeRegEx, "/thumbnails/$1/$2/1000/1000/$5.$6");
     }
     return monster;
   });
