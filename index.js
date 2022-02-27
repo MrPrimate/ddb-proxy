@@ -16,6 +16,11 @@ const campaign = require("./campaign.js");
 const app = express();
 const port = process.env.PORT || 3000;
 
+/**
+ * A simple ping to tell if the proxy is running
+ */
+app.get("/ping", cors(), (req, res) => res.send("pong"));
+
 const authPath = ["/proxy/auth"];
 app.options(authPath, cors(), (req, res) => res.status(200).send());
 app.post(authPath, cors(), express.json(), (req, res) => {
