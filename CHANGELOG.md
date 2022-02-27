@@ -1,3 +1,7 @@
+# 0.0.14
+
+* `/ping` endpoint
+
 # 0.0.13
 
 * Typo meant some monster image urls had double .com in them.
