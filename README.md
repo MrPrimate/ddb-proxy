@@ -12,7 +12,7 @@ It provides the following backend functionality for [ddb-importer](https://githu
 
 ## Setup
 
-You need to be using ddb-importer version 0.6.32 or higher.
+This proxy is updated to work with the latest version of DDB Importer as quickly as possible.
 
 Run this as a nodeJS app the standard way.
 
@@ -30,6 +30,10 @@ To revert:
 game.settings.set("ddb-importer", "api-endpoint", "https://proxy.ddb.mrprimate.co.uk");
 game.settings.set("ddb-importer", "custom-proxy", false);
 ```
+
+## How can I see if the server is running?
+
+Visit `YOUR_URL_HERE/ping` e.g. `https://myddbproxy.example.com/ping`
 
 ## Why is x feature missing
 
