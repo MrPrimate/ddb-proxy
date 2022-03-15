@@ -25,6 +25,13 @@ game.settings.set("ddb-importer", "custom-proxy", true);
 game.settings.set("ddb-importer", "api-endpoint", "YOUR_URL_HERE");
 ```
 
+e.g. localhost:
+
+```javascript
+game.settings.set("ddb-importer", "custom-proxy", true);
+game.settings.set("ddb-importer", "api-endpoint", "http://localhost:3000");
+```
+
 To revert:
 ```javascript
 game.settings.set("ddb-importer", "api-endpoint", "https://proxy.ddb.mrprimate.co.uk");

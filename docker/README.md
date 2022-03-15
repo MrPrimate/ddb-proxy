@@ -10,9 +10,9 @@ To build the container run:
 
 ## Running
 
-To run previosly built container and expose it on port 8080 of your machine run:
+To run previously built container and expose it on port 8080 of your machine run:
 
-`docker run ddb-proxy:latest -p 8080:3000`
+`docker run -p 8080:3000 -t ddb-proxy:latest`
 
 ## Security considerations
 
