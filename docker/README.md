@@ -20,6 +20,7 @@ This repository also builds newest version of the proxy automatically. You may s
 
 `docker run -p 3000:3000 ghcr.io/mrprimate/ddb-proxy:latest`
 
+
 ## Security considerations
 
 Above command exposed your proxy to the world with unsecured connections.
