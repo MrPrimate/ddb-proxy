@@ -10,9 +10,16 @@ To build the container run:
 
 ## Running
 
-To run previously built container and expose it on port 8080 of your machine run:
+To run previosly built container and expose it on port 3000 of your machine run:
 
-`docker run -p 8080:3000 -t ddb-proxy:latest`
+`docker run -p 3000:3000 ddb-proxy:latest`
+
+## Running prebuilt image
+
+This repository also builds newest version of the proxy automatically. You may start it with following command:
+
+`docker run -p 3000:3000 ghcr.io/mrprimate/ddb-proxy:latest`
+
 
 ## Security considerations
 
