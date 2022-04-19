@@ -1,3 +1,7 @@
+# 0.0.15
+
+* DDB Config fetch
+
 # 0.0.14
 
 * `/ping` endpoint

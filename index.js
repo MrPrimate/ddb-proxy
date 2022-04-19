@@ -6,6 +6,7 @@ const CONFIG = require("./config.js");
 const authentication = require("./auth.js");
 
 const filterModifiers = require("./filterModifiers.js");
+const lookup = require("./lookup.js");
 
 const spells = require("./spells.js");
 const character = require("./character.js");
@@ -31,6 +32,27 @@ app.post(authPath, cors(), express.json(), (req, res) => {
     if (!token) return res.json({ success: false, message: "You must supply a valid cobalt value." });
     return res.status(200).json({ success: true, message: "Authenticated." });
   });
+});
+
+const configLookupCall= "/proxy/api/config/json";
+app.options(configLookupCall, cors(), (req, res) => res.status(200).send());
+app.get(configLookupCall, cors(), express.json(), (req, res) => {
+
+  lookup
+    .getConfig()
+    .then((data) => {
+      return res
+        .status(200)
+        .json({ success: true, message: "Config retrieved.", data: data });
+    })
+    .catch((error) => {
+      console.log(error);
+      if (error === "Forbidden") {
+        return res.json({ success: false, message: "Forbidden." });
+      }
+      return res.json({ success: false, message: "Unknown error during config loading: " + error });
+    });
+
 });
 
 /**

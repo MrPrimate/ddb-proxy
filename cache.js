@@ -17,7 +17,10 @@ class Cache {
   }
 
   add(id, data) {
-    if (!data || !data.length) return null;
+    const isArray = Array.isArray(data);
+    const isString = typeof data === "string" || data instanceof String;
+    const isObject = typeof data === "object";
+    if (!data || ((isArray || isString) && !data.length) || (!isArray && !isString && !isObject)) return null;
     console.log(`[CACHE ${this.name}] Adding to the Cache (ID: ${id}): ${data.length} items.`);
 
     const index = this.items.find(cache => cache.id === id);
