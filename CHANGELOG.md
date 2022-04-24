@@ -1,3 +1,7 @@
+# 0.0.16
+
+* Add missing config URL.
+
 # 0.0.15
 
 * DDB Config fetch
