@@ -34,7 +34,7 @@ app.post(authPath, cors(), express.json(), (req, res) => {
   });
 });
 
-const configLookupCall= "/proxy/api/config/json";
+const configLookupCall = "/proxy/api/config/json";
 app.options(configLookupCall, cors(), (req, res) => res.status(200).send());
 app.get(configLookupCall, cors(), express.json(), (req, res) => {
 
