@@ -14,7 +14,7 @@ It provides the following backend functionality for [ddb-importer](https://githu
 
 This proxy is updated to work with the latest version of DDB Importer as quickly as possible.
 
-Run this as a nodeJS app the standard way.
+Run this as a [nodeJS](https://nodejs.org/en/) app the standard way.
 
 ```
 node index.js
