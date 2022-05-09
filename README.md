@@ -16,7 +16,14 @@ This proxy is updated to work with the latest version of DDB Importer as quickly
 
 Run this as a nodeJS app the standard way.
 
-It _must_ be proxied behind a service providing an SSL/TLS encryption if you are not running on your local machine.
+```
+node index.js
+```
+
+You can also run this as a docker image, for details see [Docker instructions](docker/README.md)
+
+
+It _must_ be proxied behind a service providing an SSL/TLS encryption if you are not running on your local machine. I would recommend [Caddy](https://caddyserver.com/).
 
 In the web browsers developer console run the following commands:
 
@@ -25,14 +32,14 @@ game.settings.set("ddb-importer", "custom-proxy", true);
 game.settings.set("ddb-importer", "api-endpoint", "YOUR_URL_HERE");
 ```
 
-e.g. localhost:
+e.g. running locally
 
 ```javascript
 game.settings.set("ddb-importer", "custom-proxy", true);
 game.settings.set("ddb-importer", "api-endpoint", "http://localhost:3000");
 ```
 
-To revert:
+To revert to MrPrimate's proxy:
 ```javascript
 game.settings.set("ddb-importer", "api-endpoint", "https://proxy.ddb.mrprimate.co.uk");
 game.settings.set("ddb-importer", "custom-proxy", false);
