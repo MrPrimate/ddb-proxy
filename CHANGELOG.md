@@ -1,3 +1,7 @@
+# 0.0.17
+
+* Exclude legacy monsters option.
+
 # 0.0.16
 
 * Add missing config URL.

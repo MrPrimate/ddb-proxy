@@ -234,6 +234,7 @@ app.post(getMonsterProxyRoutes, cors(), express.json(), (req, res) => {
 
   const homebrew = req.body.homebrew ? req.body.homebrew : false;
   const homebrewOnly = req.body.homebrewOnly ? req.body.homebrewOnly : false;
+  const excludeLegacy = req.body.excludeLegacy ? req.body.excludeLegacy : false;
 
   const exactNameMatch = req.body.exactMatch || false;
   const performExactMatch = exactNameMatch && searchTerm && searchTerm !== "";
@@ -249,6 +250,14 @@ app.post(getMonsterProxyRoutes, cors(), express.json(), (req, res) => {
 
     monsters
       .extractMonsters(cacheId, searchTerm, homebrew, homebrewOnly, sources)
+      .then((data) => {
+        if (excludeLegacy) {
+          const filteredMonsters = data.filter((monster) => !monster.isHomebrew && !monster.isLegacy);
+          return filteredMonsters;
+        } else {
+          return data;
+        }
+      })
       .then((data) => {
         if (performExactMatch) {
           const filteredMonsters = data.filter((monster) => monster.name.toLowerCase() === search.toLowerCase());
