@@ -16,6 +16,14 @@ This proxy is updated to work with the latest version of DDB Importer as quickly
 
 Run this as a [nodeJS](https://nodejs.org/en/) app the standard way.
 
+Install:
+
+```
+yarn install
+```
+
+Run:
+
 ```
 node index.js
 ```
