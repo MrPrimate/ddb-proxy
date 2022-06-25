@@ -1,3 +1,7 @@
+# 0.0.18
+
+* Some more clauses to try and stop issue #18 when it can't find a cobalt.
+
 # 0.0.17
 
 * Exclude legacy monsters option.
