@@ -185,12 +185,18 @@ app.post(["/proxy/character", "/proxy/v5/character"], cors(), express.json(), (r
         if (cobalt) {
           const optionIds = result.character.optionalClassFeatures.map((opt) => opt.classFeatureId);
           return character.getOptionalClassFeatures(result, optionIds, campaignId, cobaltId);
+        } else {
+          console.warn("No cobalt token provided, not fetching optional class features");
+          return result;
         }
       })
       .then((result) => {
         if (cobalt) {
           const optionIds = result.character.optionalOrigins.map((opt) => opt.racialTraitId);
           return character.getOptionalOrigins(result, optionIds, campaignId, cobaltId);
+        }else {
+          console.warn("No cobalt token provided, not fetching optional origins");
+          return result;
         }
       })
       .then((result) => {
