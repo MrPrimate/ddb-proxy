@@ -1,3 +1,8 @@
+# 0.0.19
+
+* Prevent legacy checkbox excluding homebrew.
+* If homebrew was disabled on the character, it would still add homebrew spells to the characters available selection.
+
 # 0.0.18
 
 * Some more clauses to try and stop issue #18 when it can't find a cobalt.

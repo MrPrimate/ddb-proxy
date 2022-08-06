@@ -208,6 +208,10 @@ app.post(["/proxy/character", "/proxy/v5/character"], cors(), express.json(), (r
           : [];
         return spells.getSpellAdditions(result, spellListIds, cobaltId);
       })
+      .then((result) => {
+        const includeHomebrew = result.character.preferences.useHomebrewContent;
+        return spells.filterHomebrew(result, includeHomebrew);
+      })
       .then((data) => {
         data = filterModifiers(data);
         return { success: true, messages: ["Character successfully received."], ddb: data };
@@ -258,7 +262,7 @@ app.post(getMonsterProxyRoutes, cors(), express.json(), (req, res) => {
       .extractMonsters(cacheId, searchTerm, homebrew, homebrewOnly, sources)
       .then((data) => {
         if (excludeLegacy) {
-          const filteredMonsters = data.filter((monster) => !monster.isHomebrew && !monster.isLegacy);
+          const filteredMonsters = data.filter((monster) => !monster.isLegacy);
           return filteredMonsters;
         } else {
           return data;
