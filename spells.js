@@ -271,10 +271,10 @@ function filterHomebrew(data, includeHomebrew) {
       classSpells.spells = classSpells.spells.filter(spell => !spell.definition.isHomebrew);
       return classSpells;
     });
-    data.character.spells.class = data.character.spells.class.filter(spell => !spell.definition.isHomebrew);
-    data.character.spells.race = data.character.spells.race.filter(spell => !spell.definition.isHomebrew);
-    data.character.spells.feat = data.character.spells.feat.filter(spell => !spell.definition.isHomebrew);
-    data.character.spells.item = data.character.spells.item.filter(spell => !spell.definition.isHomebrew);
+    data.character.spells.class = data.character.spells.class.filter(spell => !spell.definition || !spell.definition.isHomebrew);
+    data.character.spells.race = data.character.spells.race.filter(spell => !spell.definition || !spell.definition.isHomebrew);
+    data.character.spells.feat = data.character.spells.feat.filter(spell => !spell.definition || !spell.definition.isHomebrew);
+    data.character.spells.item = data.character.spells.item.filter(spell => !spell.definition || !spell.definition.isHomebrew);
     return data;
   }
 }
