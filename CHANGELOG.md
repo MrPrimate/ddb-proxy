@@ -1,3 +1,7 @@
+# 0.0.20
+
+* `isHomebrew` spell parsing bug for feat granted spells
+
 # 0.0.19
 
 * Prevent legacy checkbox excluding homebrew.

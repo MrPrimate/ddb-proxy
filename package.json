@@ -1,6 +1,6 @@
 {
   "name": "ddb-proxy",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
