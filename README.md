@@ -33,7 +33,7 @@ You can also run this as a docker image, for details see [Docker instructions](d
 
 It _must_ be proxied behind a service providing an SSL/TLS encryption if you are not running on your local machine. I would recommend [Caddy](https://caddyserver.com/).
 
-In the web browsers developer console run the following commands:
+In Foundry's developer console or the web browser's developer console (F12) run the following commands:
 
 ```javascript
 game.settings.set("ddb-importer", "custom-proxy", true);
