@@ -30,10 +30,11 @@ node index.js
 
 You can also run this as a docker image, for details see [Docker instructions](docker/README.md)
 
-
 It _must_ be proxied behind a service providing an SSL/TLS encryption if you are not running on your local machine. I would recommend [Caddy](https://caddyserver.com/).
 
-In Foundry's developer console or the web browser's developer console (depending on how you're hosting Foundry) run the following commands:
+If using DDB Importer v3.1.26 or higher you can enable the custom proxy and change the endpoint address in the settings menu.
+
+If using an earlier version, in Foundry's developer console or the web browser's developer console (depending on how you're hosting Foundry) run the following commands:
 
 ```javascript
 game.settings.set("ddb-importer", "custom-proxy", true);

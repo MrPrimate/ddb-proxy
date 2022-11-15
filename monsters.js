@@ -100,8 +100,8 @@ function extractMonstersById (cobaltId, ids) {
       const hardTotal = total;
       while (total >= count && hardTotal >= count) {
         const idSelection = ids.slice(count, count + take);
-        const headers =
-          authentication.CACHE_AUTH.exists(cobaltId).data !== null
+        const headers
+          = authentication.CACHE_AUTH.exists(cobaltId).data !== null
             ? { headers: { Authorization: `Bearer ${authentication.CACHE_AUTH.exists(cobaltId).data}` } }
             : {};
         const url = CONFIG.urls.monsterIdsAPI(idSelection);

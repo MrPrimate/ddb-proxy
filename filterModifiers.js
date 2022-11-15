@@ -38,9 +38,9 @@ function getClassInfo(data) {
  */
 function getClassFeatures(cls, classLevel = 20) {
   if (
-    cls.subclassDefinition &&
-    cls.subclassDefinition.classFeatures &&
-    Array.isArray(cls.subclassDefinition.classFeatures)
+    cls.subclassDefinition
+    && cls.subclassDefinition.classFeatures
+    && Array.isArray(cls.subclassDefinition.classFeatures)
   ) {
     return cls.classFeatures
       .map(feature => feature.definition)
