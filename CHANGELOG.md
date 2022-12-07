@@ -1,3 +1,7 @@
+# 0.0.21
+
+* If using Tasha's optional spell lists for a sorcerer, with a prepared spell casting class, the spells would be added to the Paladin known spells.
+
 # 0.0.20
 
 * `isHomebrew` spell parsing bug for feat granted spells

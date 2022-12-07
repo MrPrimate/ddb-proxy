@@ -100,7 +100,7 @@ const extractAlwaysKnownSpells = (classInfo, cobaltId, cantrips, spellListIds=[]
     const { name, id, spellLevelAccess } = classInfo;
     console.log(`Retrieving all known spells for ${name} (${id}) at spell level ${spellLevelAccess}`);
 
-    const url = CONFIG.urls.alwaysKnownSpells(id, 20, classInfo.campaignId, spellListIds);
+    const url = CONFIG.urls.alwaysKnownSpells(id, 20, classInfo.campaignId, spellListIds, classInfo.backgroundId);
     console.log(url);
     // console.log(`Bearer ${authentication.CACHE_AUTH.exists(cobaltId).data}`);
     const headers = (authentication.CACHE_AUTH.exists(cobaltId).data !== null) ? {headers: {"Authorization": `Bearer ${authentication.CACHE_AUTH.exists(cobaltId).data}`}} : {};
@@ -155,11 +155,12 @@ const extractSpellLevelAccess = (cls, casterLevel) => {
 };
 
 
-const extractClassIds = data => {
-  const isMultiClassing = data.classes.length > 1;
-  return data.classes.map(characterClass => {
+const extractClassIds = (data) => {
+  const isMultiClassing = data.character.classes.length > 1;
+  return data.character.classes.map(characterClass => {
     return {
       characterClassId: characterClass.id,
+      backgroundId: data.character.background.definition && data.character.background.definition.id ? data.character.background.definition.id : null,
       name:
         characterClass.subclassDefinition && characterClass.subclassDefinition.name
           ? characterClass.definition.name + ` (${characterClass.subclassDefinition.name})`
@@ -175,23 +176,36 @@ const extractClassIds = data => {
       subclassId: characterClass.subclassDefinition ? characterClass.subclassDefinition.id : null,
       characterClass: characterClass.definition.name,
       characterSubclass: characterClass.subclassDefinition ? characterClass.subclassDefinition.name : null,
-      characterId: data.id,
-      campaignId: (data.campaign) ? data.campaign.id : null,
+      characterId: data.character.id,
+      campaignId: (data.character.campaign) ? data.character.campaign.id : null,
+      spellListIds: data.classOptions
+        ? data.classOptions
+          .filter((option) => option.spellListIds)
+          .filter((option) =>
+            option.spellListIds && option.spellListIds.length > 0
+            && (option.classId == characterClass.definition.id
+            || (characterClass.subclassDefinition && characterClass.subclassDefinition.id == option.classId))
+          )
+          .map((option) => {
+            return option.spellListIds;
+          })
+          .flat()
+        : [],
     };
   });
 };
 
-const loadSpellAdditions = (classInfo, cobaltId, spellListIds) => {
+const loadSpellAdditions = (classInfo, cobaltId) => {
   const cobaltToken = authentication.CACHE_AUTH.exists(cobaltId);
   return new Promise((resolve, reject) => {
     Promise.allSettled(classInfo.map(info => {
       const knowSpellsClasses = ["Druid", "Cleric", "Paladin", "Artificer"];
       if (cobaltToken && knowSpellsClasses.includes(info.characterClass)) {
         console.log("[ ALWAYS KNOWN SPELLS =========================================== ]");
-        return extractAlwaysKnownSpells(info, cobaltId, true, spellListIds);
+        return extractAlwaysKnownSpells(info, cobaltId, true, info.spellListIds);
       } else {
         console.log("[ ALWAYS PREPARED SPELLS ======================================== ]");
-        return extractAlwaysPreparedSpells(info, spellListIds);
+        return extractAlwaysPreparedSpells(info, info.spellListIds);
       }
     }))
       .then(results => {
@@ -234,13 +248,13 @@ const loadSpells = (classInfo, cobaltToken, cantrips) => {
   });
 };
 
-function getSpellAdditions(data, spellListIds, cacheId) {
+function getSpellAdditions(data, cacheId) {
   return new Promise((resolve) => {
-    const classInfo = extractClassIds(data.character);
+    const classInfo = extractClassIds(data);
     console.log("CLASS INFORMATION FOR SPELL ADDITIONS:");
     console.log(classInfo);
 
-    loadSpellAdditions(classInfo, cacheId, spellListIds).then(classInfo => {
+    loadSpellAdditions(classInfo, cacheId).then(classInfo => {
       // add the always prepared spells to the class' spell list
       data.character.classSpells = data.character.classSpells.map(classSpells => {
         // find always prepared spells in the results

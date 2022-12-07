@@ -200,13 +200,7 @@ app.post(["/proxy/character", "/proxy/v5/character"], cors(), express.json(), (r
         }
       })
       .then((result) => {
-        const spellListIds = result.classOptions
-          ? result.classOptions
-            .filter((option) => option.spellListIds)
-            .map((option) => option.spellListIds)
-            .flat()
-          : [];
-        return spells.getSpellAdditions(result, spellListIds, cobaltId);
+        return spells.getSpellAdditions(result, cobaltId);
       })
       .then((result) => {
         const includeHomebrew = result.character.preferences.useHomebrewContent;

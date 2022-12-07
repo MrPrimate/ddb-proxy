@@ -45,12 +45,13 @@ const CONFIG = {
       if (campaignId) campaign = `&campaignId=${campaignId}`;
       return `${CONFIG.urls.baseUrl}/game-data/always-prepared-spells?classId=${classId}&classLevel=${classLevel}&sharingSetting=2${campaign}${spellLists}`;
     },
-    alwaysKnownSpells: (classId, classLevel, campaignId, spellListIds=[]) => {
+    alwaysKnownSpells: (classId, classLevel, campaignId, spellListIds = [], backgroundId = null) => {
       let campaign = "";
       let spellLists = "";
-      spellListIds.forEach(list => spellLists += `&spellListIds[]=${list}`);
+      let backgroundIdAdd = spellListIds.length === 0 && backgroundId ? `&backgroundId=${backgroundId}` : "";
+      spellListIds.forEach((list) => (spellLists += `&spellListIds[]=${list}`));
       if (campaignId) campaign = `&campaignId=${campaignId}`;
-      return `${CONFIG.urls.baseUrl}/game-data/always-known-spells?classId=${classId}&classLevel=${classLevel}&sharingSetting=2${campaign}${spellLists}`;
+      return `${CONFIG.urls.baseUrl}/game-data/always-known-spells?classId=${classId}&classLevel=${classLevel}&sharingSetting=2${campaign}${spellLists}${backgroundIdAdd}`;
     },
     itemsAPI: (campaignId) => {
       let campaign = "";
