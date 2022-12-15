@@ -195,25 +195,31 @@ const extractClassIds = (data) => {
   });
 };
 
-const loadSpellAdditions = (classInfo, cobaltId) => {
+async function extractExtraSpellsForClass(klassInfo, cobaltId) {
   const cobaltToken = authentication.CACHE_AUTH.exists(cobaltId);
+  const knowSpellsClasses = ["Druid", "Cleric", "Paladin", "Artificer"];
+  console.log("[ ALWAYS KNOWN SPELLS =========================================== ]");
+  const alwaysKnownSpells = cobaltToken && knowSpellsClasses.includes(klassInfo.characterClass)
+    ? await extractAlwaysKnownSpells(klassInfo, cobaltId, true, klassInfo.spellListIds)
+    : [];
+  console.log("[ ALWAYS PREPARED SPELLS ======================================== ]");
+  const alwaysPreparedSpells = await extractAlwaysPreparedSpells(klassInfo, klassInfo.spellListIds);
+  return {
+    alwaysKnownSpells,
+    alwaysPreparedSpells,
+  };
+}
+
+// this is used by the character loader to load class spells
+const loadSpellAdditions = (classInfo, cobaltId) => {
   return new Promise((resolve, reject) => {
     Promise.allSettled(classInfo.map(info => {
-      const knowSpellsClasses = ["Druid", "Cleric", "Paladin", "Artificer"];
-      if (cobaltToken && knowSpellsClasses.includes(info.characterClass)) {
-        console.log("[ ALWAYS KNOWN SPELLS =========================================== ]");
-        return extractAlwaysKnownSpells(info, cobaltId, true, info.spellListIds);
-      } else {
-        console.log("[ ALWAYS PREPARED SPELLS ======================================== ]");
-        return extractAlwaysPreparedSpells(info, info.spellListIds);
-      }
+      return extractExtraSpellsForClass(info, cobaltId);
     }))
       .then(results => {
         // combining all resolved results
         results.forEach((result, index) => {
-          if (result.status === "fulfilled") {
-            classInfo[index].spells = result.value;
-          }
+          classInfo[index].spells = result.value.alwaysKnownSpells.concat(result.value.alwaysPreparedSpells);
         });
         resolve(classInfo);
       })
@@ -221,19 +227,13 @@ const loadSpellAdditions = (classInfo, cobaltId) => {
   });
 };
 
+// this is used by the spell muncher to munch all class spells
 const loadSpells = (classInfo, cobaltToken, cantrips) => {
   return new Promise((resolve, reject) => {
     Promise.allSettled(classInfo.map(info => {
-      if (info.spellType == "KNOWN") {
-        console.log("[ ALWAYS KNOWN SPELLS =========================================== ]");
-        const knownSpells = extractAlwaysKnownSpells(info, cobaltToken, cantrips);
-        const otherSpells = extractSpells(info, cobaltToken); // for cantrips etc
-        return Promise.all([knownSpells, otherSpells]);
-      } else if (info.spellType == "SPELLS") {
-        console.log("[ ALL SPELLS ==================================================== ]");
-        const otherSpells = extractSpells(info, cobaltToken);
-        return Promise.all([otherSpells]);
-      }
+      const knownSpells = extractAlwaysKnownSpells(info, cobaltToken, cantrips);
+      const otherSpells = extractSpells(info, cobaltToken); // for cantrips etc
+      return Promise.all([knownSpells, otherSpells]);
     }))
       .then(results => {
         // combining all resolved results
