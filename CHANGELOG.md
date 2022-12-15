@@ -1,3 +1,7 @@
+# 0.0.22
+
+* Some custom spells would not be fetched, depending on how they were attached to characters like the Druid.
+
 # 0.0.21
 
 * If using Tasha's optional spell lists for a sorcerer, with a prepared spell casting class, the spells would be added to the Paladin known spells.
