@@ -1,4 +1,5 @@
-version: '3'
+version: "3.8"
+
 services:
   nginx-proxy:
     image: nginxproxy/nginx-proxy:latest
@@ -15,19 +16,17 @@ services:
       - ./volumes/certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
-  letsencrypt-nginx-proxy-companion:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
     restart: always
-    container_name: nginx-proxy-le
+    container_name: nginx-proxy-acme
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./volumes/conf:/etc/nginx/conf.d
-      - ./volumes/vhost:/etc/nginx/vhost.d
-      - ./volumes/html:/usr/share/nginx/html
-      - ./volumes/dhparam:/etc/nginx/dhparam
       - ./volumes/certs:/etc/nginx/certs:rw
+      - ./volumes/lets_encrypt/acme.sh:/etc/acme.sh
+    volumes_from:
+      - nginx-proxy
     environment:
-      - NGINX_PROXY_CONTAINER=nginx-proxy
       - DEFAULT_EMAIL=[your email here]
 
   # this service can be a separate file, remember to
@@ -38,7 +37,8 @@ services:
       - VIRTUAL_HOST=ddb-proxy.example.com
       - VIRTUAL_PORT=3000
       - LETSENCRYPT_HOST=ddb-proxy.example.com
+
 networks:
   default:
-    external:
-      name: nginx-proxy
+    name: nginx-proxy
+    # external: true
