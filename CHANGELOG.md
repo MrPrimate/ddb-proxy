@@ -1,4 +1,4 @@
-# 0.0.22
+# 0.0.22/ 0.2.23
 
 * Some custom spells would not be fetched, depending on how they were attached to characters like the Druid.
 
