@@ -5,14 +5,25 @@ const CONFIG = require("./config.js");
 
 var CACHE_AUTH = new Cache("AUTH", 0.08);
 
+function isJSON(str) {
+  try {
+    return (JSON.parse(str) && !!str);
+  } catch (e) {
+    return false;
+  }
+}
+
 function getBearerToken(id, cobalt) {
   return new Promise((resolve) => {
-    if (cobalt && cobalt !== ""){
+    if (cobalt && cobalt !== "" && !isJSON(`{ "cobalt": "${cobalt}" }`)) {
+      console.log(`Invalid token for ${id}`);
+      return null;
+    } else if (cobalt && cobalt !== "") {
       fetch(CONFIG.urls.authService, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Cookie": `CobaltSession=${cobalt}`
+          Cookie: `CobaltSession=${cobalt}`,
         },
       })
         .then((response) => response.json())
