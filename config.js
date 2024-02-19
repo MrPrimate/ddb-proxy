@@ -32,7 +32,7 @@ const CONFIG = {
     baseUrl: "https://character-service.dndbeyond.com/character/v5",
     monsterBaseUrl: "https://monster-service.dndbeyond.com/v1/Monster",
     characterUrl: (characterId) =>
-      `${CONFIG.urls.baseUrl}/character/${characterId}`,
+      `${CONFIG.urls.baseUrl}/character/${characterId}?includeCustomItems=true`,
     spellsAPI: (classId, classLevel, campaignId) => {
       let campaign = "";
       if (campaignId) campaign = `&campaignId=${campaignId}`;

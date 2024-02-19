@@ -1,3 +1,7 @@
+# 0.0.25
+
+* Fetch Custom Items for Characters
+
 # 0.0.24
 
 * Aggressive Campaign caching
