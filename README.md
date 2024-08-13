@@ -58,6 +58,12 @@ game.settings.set("ddb-importer", "custom-proxy", false);
 
 Visit `YOUR_URL_HERE/ping` e.g. `https://myddbproxy.example.com/ping`
 
+## Why can't the ddb importer use the proxy?
+
+The proxy needs to be reachable from your client (eg. your personal computer). Foundry needs to be able to reach it as well. After this is solved, go to ddb-importer settings,
+enter the reachable URL (eg. https://my-ddb-importer-proxy.domain.com , add the port if not running on port 443, by default it is port 3000), check the checkbox "use custom proxy",
+hit save changes and continue using the proxy.
+
 ## Why is x feature missing
 
 This is a cut down, MVP implementation of the proxy, it is meant for individual use and does not implement caching. It should not be run as a service for others.
