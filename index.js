@@ -223,6 +223,36 @@ app.post(["/proxy/character", "/proxy/v5/character"], cors(), express.json(), (r
   });
 });
 
+app.options(["/proxy/character", "/proxy/v5/character"], cors(), (req, res) => res.status(200).send());
+app.get(["/proxy/character", "/proxy/v5/character"], cors(), (req, res) => {
+  // Get character ID from query parameter
+  let characterId = 0;
+  try {
+    const characterIdString = req.query.character;
+    if (!characterIdString) {
+      return res.status(400).json({ message: "Missing character parameter" });
+    }
+    // characterId = parseInt(characterIdString);
+    characterId = 5634490;
+    console.log("CHARACTER ID: ", characterId);
+    if (isNaN(characterId)) {
+      return res.status(400).json({ message: "Invalid character ID" });
+    }
+  } catch (exception) {
+    return res.status(400).json({ message: "Invalid query" });
+  }
+
+  // Since this is a GET request without authentication, we'll proceed without cobalt token
+  // No update ID for GET requests
+
+  character
+    .getRawCharacter(characterId)
+    .then((data) => {
+      console.log(`Name: ${data.data.name}, URL: ${CONFIG.urls.baseUrl}/character/${data.id}`);
+      return res.json(data);
+    });
+});
+
 /**
  * Return RAW monster data from DDB
  */
