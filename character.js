@@ -7,7 +7,7 @@ const isValidData = data => {
 };
 
 
-const extractClassOptions = (cobaltId, optionIds=[], campaignId=null) => {
+const extractClassOptions = (cobaltId, optionIds = [], campaignId = null) => {
   console.log(optionIds);
 
   return new Promise((resolve, reject) => {
@@ -55,7 +55,7 @@ const extractClassOptions = (cobaltId, optionIds=[], campaignId=null) => {
 };
 
 
-const extractRacialTraitsOptions = (cobaltId, optionIds=[], campaignId=null) => {
+const extractRacialTraitsOptions = (cobaltId, optionIds = [], campaignId = null) => {
   console.log(optionIds);
 
   return new Promise((resolve, reject) => {
@@ -111,12 +111,35 @@ const checkStatus = res => {
   }
 };
 
+const getRawCharacter = (characterId) => {
+  return new Promise((resolve, reject) => {
+    console.log(`Retrieving character id ${characterId}`);
+
+    const headers = {};
+    const characterUrl = CONFIG.urls.characterUrl(characterId);
+    fetch(characterUrl, headers)
+      .then(checkStatus)
+      .then(res => res.json())
+      .then(json => {
+        if (isValidData(json)) {
+          resolve(json);
+        } else {
+          reject(json.message);
+        }
+      })
+      .catch(error => {
+        console.log(`loadCharacterData(${characterId}): ${error}`);
+        reject(error);
+      });;
+  });
+};
+
 const extractCharacterData = (cobaltId, characterId) => {
   return new Promise((resolve, reject) => {
     console.log(`Retrieving character id ${characterId}`);
 
     const auth = authentication.CACHE_AUTH.exists(cobaltId);
-    const headers = (auth) ? {headers: {"Authorization": `Bearer ${auth.data}`}} : {};
+    const headers = (auth) ? { headers: { "Authorization": `Bearer ${auth.data}` } } : {};
     const characterUrl = CONFIG.urls.characterUrl(characterId);
     fetch(characterUrl, headers)
       .then(checkStatus)
@@ -173,6 +196,7 @@ const getOptionalOrigins = (data, optionIds, campaignId, cobaltId) => {
 
 
 exports.extractClassOptions = extractClassOptions;
+exports.getRawCharacter = getRawCharacter;
 exports.extractCharacterData = extractCharacterData;
 exports.getOptionalClassFeatures = getOptionalClassFeatures;
 exports.getOptionalOrigins = getOptionalOrigins;
