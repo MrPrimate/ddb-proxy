@@ -33,6 +33,7 @@ You can also run this as a docker image, for details see [Docker instructions](d
 It _must_ be proxied behind a service providing an SSL/TLS encryption if you are not running on your local machine. I would recommend [Caddy](https://caddyserver.com/).
 
 If using DDB Importer v3.1.26 or higher you can enable the custom proxy and change the endpoint address in the settings menu.
+> Note: the endpoint address should not have a forward slash at the end. For example: http://example.com:3000 rather than http://exampole.com:3000/
 
 If using an earlier version, in Foundry's developer console or the web browser's developer console (depending on how you're hosting Foundry) run the following commands:
 
