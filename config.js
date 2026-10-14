@@ -2,7 +2,7 @@
  * CONFIG
  */
 
-const CLASS_MAP = [
+const CLASS_MAP_2014 = [
   { name: "Barbarian", spells: "SPELLS", id: 9 },
   { name: "Bard", spells: "SPELLS", id: 1 },
   { name: "Cleric", spells: "KNOWN", id: 2 },
@@ -19,7 +19,37 @@ const CLASS_MAP = [
   { name: "Blood Hunter", spells: "SPELLS", id: 357975 },
   { name: "Graviturgy", spells: "SPELLS", id: 400661 },
   { name: "Chronurgy", spells: "SPELLS", id: 400659 },
+  { name: "Illrigger", spells: "SPELLS", id: 2289517 },
 ];
+
+const CLASS_MAP_2024 = [
+  { name: "Barbarian", spells: "SPELLS", id: 2190875 },
+  { name: "Bard", spells: "SPELLS", id: 2190876 },
+  { name: "Cleric", spells: "KNOWN", id: 2190877 },
+  { name: "Druid", spells: "KNOWN", id: 2190878 },
+  { name: "Fighter", spells: "SPELLS", id: 2190879 },
+  { name: "Monk", spells: "SPELLS", id: 2190880 },
+  { name: "Paladin", spells: "KNOWN", id: 2190881 },
+  { name: "Ranger", spells: "KNOWN", id: 2190882 },
+  { name: "Rogue", spells: "SPELLS", id: 2190883 },
+  { name: "Sorcerer", spells: "SPELLS", id: 2190884 },
+  { name: "Warlock", spells: "SPELLS", id: 2190885 },
+  { name: "Wizard", spells: "SPELLS", id: 2190886 },
+  { name: "Artificer", spells: "KNOWN", id: 2656866 },
+  { name: "Blood Hunter", spells: "SPELLS", id: 357975 },
+  { name: "Graviturgy", spells: "SPELLS", id: 400661 },
+  { name: "Chronurgy", spells: "SPELLS", id: 400659 },
+  { name: "Illrigger", spells: "SPELLS", id: 2289517 },
+  { name: "Gunslinger", spells: "SPELLS", id: 2498109 },
+  { name: "Monster Hunter", spells: "SPELLS", id: 2566877 },
+  { name: "Magus", spells: "SPELLS", id: 2889169 },
+];
+
+// keyed by the D&D rules version the client asks for, ddb-importer sends "2014" or "2024"
+const CLASS_MAP = {
+  "2014": CLASS_MAP_2014,
+  "2024": CLASS_MAP_2024,
+};
 
 const BAD_IMAGES = [
 ];
@@ -86,6 +116,7 @@ const CONFIG = {
     },
     campaignsAPI: "https://www.dndbeyond.com/api/campaign/stt/user-campaigns",
     configUrl: "https://www.dndbeyond.com/api/config/json",
+    userData: "https://www.dndbeyond.com/mobile/api/v6/user-data",
   },
 
 };

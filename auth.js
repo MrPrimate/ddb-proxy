@@ -50,6 +50,33 @@ function getCacheId(value) {
 
 
 
+/**
+ * Fetch the D&D Beyond account details for a cobalt token
+ */
+function getUserData(cobalt) {
+  const body = new URLSearchParams();
+  body.append("token", `${cobalt}`);
+  return fetch(CONFIG.urls.userData, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body,
+    redirect: "follow",
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.status !== "success") throw new Error(result.message ?? "Unexpected user data response");
+      return result.data ?? result;
+    })
+    .catch((error) => {
+      console.log("Error retrieving user data");
+      console.log(error);
+      return { error: true, message: "Unable to authenticate, check Cobalt value" };
+    });
+}
+
 exports.CACHE_AUTH = CACHE_AUTH;
 exports.getBearerToken = getBearerToken;
 exports.getCacheId = getCacheId;
+exports.getUserData = getUserData;

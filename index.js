@@ -34,6 +34,20 @@ app.post(authPath, cors(), express.json(), (req, res) => {
   });
 });
 
+/**
+ * Returns the D&D Beyond account details for a cobalt token, used by the ddb-importer debug tool
+ */
+const userDataPath = ["/proxy/user-data"];
+app.options(userDataPath, cors(), (req, res) => res.status(200).send());
+app.post(userDataPath, cors(), express.json(), (req, res) => {
+  if (!req.body.cobalt || req.body.cobalt == "") return res.json({ success: false, message: "No cobalt token" });
+
+  authentication.getUserData(req.body.cobalt).then((data) => {
+    if (data.error) return res.json({ success: false, message: data.message });
+    return res.status(200).json({ success: true, message: "User data retrieved.", data });
+  });
+});
+
 const configLookupCall = "/proxy/api/config/json";
 app.options(configLookupCall, cors(), (req, res) => res.status(200).send());
 app.get(configLookupCall, cors(), express.json(), (req, res) => {
@@ -91,8 +105,9 @@ app.options("/proxy/class/spells", cors(), (req, res) => res.status(200).send())
 app.post("/proxy/class/spells", cors(), express.json(), (req, res) => {
   const className = req.body.className ? req.body.className : req.params.className;
   const campaignId = req.body.campaignId;
+  const rulesVersion = req.body.rulesVersion ? `${req.body.rulesVersion}` : "2014";
 
-  const klass = CONFIG.classMap.find((cls) => cls.name == className);
+  const klass = CONFIG.classMap[rulesVersion]?.find((cls) => cls.name == className);
   if (!klass) return res.json({ success: false, message: "Invalid query" });
   if (!req.body.cobalt || req.body.cobalt == "") return res.json({ success: false, message: "No cobalt token" });
   const cobaltToken = req.body.cobalt;
@@ -112,7 +127,7 @@ app.post("/proxy/class/spells", cors(), express.json(), (req, res) => {
       characterClass: klass.name,
       characterSubclass: klass.name,
       characterId: cacheId,
-      spellType: klass.spells,
+      spellType: klass.spells ?? "SPELLS",
       campaignId: campaignId,
     },
   ];
