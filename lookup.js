@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const CONFIG = require("./config.js");
 const Cache = require("./cache.js");
 

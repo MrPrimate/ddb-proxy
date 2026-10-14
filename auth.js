@@ -1,6 +1,5 @@
 const crypto = require("crypto");
 const Cache = require("./cache");
-const fetch = require("node-fetch");
 const CONFIG = require("./config.js");
 
 var CACHE_AUTH = new Cache("AUTH", 0.08);
@@ -8,7 +7,7 @@ var CACHE_AUTH = new Cache("AUTH", 0.08);
 function isJSON(str) {
   try {
     return (JSON.parse(str) && !!str);
-  } catch (e) {
+  } catch {
     return false;
   }
 }

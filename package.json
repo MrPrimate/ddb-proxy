@@ -1,22 +1,24 @@
 {
   "name": "ddb-proxy",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
-    "lint": "npx eslint ./",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "start": "node index.js",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "node-fetch": "^2.6.0",
-    "yarn": "^1.22.17"
+    "cors": "^2.8.6",
+    "express": "^5.3.0"
   },
   "devDependencies": {
-    "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.4.0",
-    "prettier": "2.0.5"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10"
   }
 }

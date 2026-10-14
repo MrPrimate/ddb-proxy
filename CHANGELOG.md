@@ -2,6 +2,8 @@
 
 * Class spell lists honour the `rulesVersion` sent by ddb-importer, adding the 2024 class lists (including Artificer and Magus). Previously a 2024 request returned the 2014 list, or "Invalid query" for 2024-only classes such as the Magus.
 * Add `/proxy/user-data`, used by the ddb-importer debug tool.
+* Docker image now uses Node 24 on Alpine 3.24 and builds from the checked out source rather than cloning the repository. Images are published for `linux/amd64` and `linux/arm64`; 32-bit ARM is dropped as Node 24 has no 32-bit ARM Alpine image.
+* Requires Node 20.19 or newer. Dependencies updated (Express 5, ESLint 10 flat config, Prettier 3); `node-fetch` replaced by Node's built-in `fetch`.
 
 # 0.0.25
 

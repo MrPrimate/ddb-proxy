@@ -1,5 +1,4 @@
 // This data is the light version of data available in the character builder
-const fetch = require("node-fetch");
 const CONFIG = require("./config.js");
 const authentication = require("./auth.js");
 const Cache = require("./cache");

@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const CONFIG = require("./config.js");
 const authentication = require("./auth.js");
 
@@ -24,7 +23,6 @@ const extractClassOptions = (cobaltId, optionIds=[], campaignId=null) => {
     const headers = (auth && auth.data) ? {
       "Authorization": `Bearer ${auth.data}`,
       "Content-Type": "application/json",
-      "Content-Length": body.length,
     } : {};
 
     const options = {
@@ -72,7 +70,6 @@ const extractRacialTraitsOptions = (cobaltId, optionIds=[], campaignId=null) => 
     const headers = (auth && auth.data) ? {
       "Authorization": `Bearer ${auth.data}`,
       "Content-Type": "application/json",
-      "Content-Length": body.length,
     } : {};
 
     const options = {

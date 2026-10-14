@@ -1,15 +1,18 @@
-FROM node:16-alpine AS build
+# Build from the repository root: docker build -f docker/dockerfile -t ddb-proxy .
+FROM node:24-alpine3.24 AS build
 
-RUN ["apk", "add", "--no-cache", "yarn", "git"]
 WORKDIR /srv
-RUN ["git", "clone", "https://github.com/MrPrimate/ddb-proxy", ".", "--depth", "1" ]
-RUN ["yarn", "install", "--production"]
+COPY package.json yarn.lock ./
+RUN ["yarn", "install", "--production", "--frozen-lockfile"]
+COPY *.js LICENSE ./
 
-FROM node:16-alpine AS ddb-proxy
+FROM node:24-alpine3.24 AS ddb-proxy
 
+ENV NODE_ENV=production
 EXPOSE 3000
 
 WORKDIR /srv
 
 COPY --from=build /srv /srv
+USER node
 CMD [ "node", "index.js" ]

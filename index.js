@@ -17,6 +17,12 @@ const campaign = require("./campaign.js");
 const app = express();
 const port = process.env.PORT || 3000;
 
+// express 5 leaves req.body undefined when no body parser ran, the handlers expect an object
+app.use((req, res, next) => {
+  if (req.body === undefined) req.body = {};
+  next();
+});
+
 /**
  * A simple ping to tell if the proxy is running
  */
@@ -170,7 +176,7 @@ app.post(["/proxy/character", "/proxy/v5/character"], cors(), express.json(), (r
   try {
     const characterIdString = req.body.characterId ? req.body.characterId : req.params.characterId;
     characterId = parseInt(characterIdString);
-  } catch (exception) {
+  } catch {
     return res.json({ message: "Invalid query" });
   }
 

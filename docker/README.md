@@ -4,9 +4,11 @@ This dockerfile allows you to run ddb-proxy in docker container.
 
 ## Building
 
-To build the container run:
+To build the container, run this from the repository root (not the `docker` folder):
 
-`docker build . -t ddb-proxy`
+`docker build -f docker/dockerfile -t ddb-proxy .`
+
+The image runs Node 24 on Alpine 3.24 and is published for `linux/amd64` and `linux/arm64`. 32-bit ARM (for example a Raspberry Pi running a 32-bit OS) is no longer supported because Node 24 has no 32-bit ARM Alpine image; run the proxy directly with Node there, or switch to a 64-bit OS.
 
 ## Running
 
