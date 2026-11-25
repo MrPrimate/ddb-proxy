@@ -1,3 +1,7 @@
+# 0.0.27
+
+* WoW class support.
+
 # 0.0.26
 
 * Class spell lists honour the `rulesVersion` sent by ddb-importer, adding the 2024 class lists (including Artificer and Magus). Previously a 2024 request returned the 2014 list, or "Invalid query" for 2024-only classes such as the Magus.
