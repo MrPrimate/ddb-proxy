@@ -43,6 +43,13 @@ const CLASS_MAP_2024 = [
   { name: "Gunslinger", spells: "SPELLS", id: 2498109 },
   { name: "Monster Hunter", spells: "SPELLS", id: 2566877 },
   { name: "Magus", spells: "SPELLS", id: 2889169 },
+  // World of Warcraft classes with spell lists of their own, requested by name by ddb-importer
+  { name: "Death Knight", spells: "KNOWN", id: 2921849 },
+  { name: "Demon Hunter", spells: "KNOWN", id: 2921842 },
+  { name: "Evoker", spells: "SPELLS", id: 2921852 },
+  { name: "Hunter", spells: "KNOWN", id: 2921850 },
+  { name: "Mage", spells: "SPELLS", id: 2921854 },
+  { name: "Priest", spells: "KNOWN", id: 2921845 },
 ];
 
 // keyed by the D&D rules version the client asks for, ddb-importer sends "2014" or "2024"
